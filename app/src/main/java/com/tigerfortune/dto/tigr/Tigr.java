@@ -3,10 +3,7 @@ package com.tigerfortune.dto.tigr;
 import android.widget.ImageView;
 
 import com.tigerfortune.activity.level.ActivityLevel;
-
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-
 
 @Getter
 public class Tigr {

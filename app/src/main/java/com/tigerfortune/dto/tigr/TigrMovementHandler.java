@@ -27,7 +27,7 @@ public class TigrMovementHandler {
         int tigerRightEdge = tiger.view.getRight();
 
         // Проверяем, не у края ли земля
-        if (tigerRightEdge >= groundWidth - 50) { // добавим небольшой запас
+        if (tigerRightEdge >= groundWidth - tiger.activityLevel.groundItmWidthInDP) { // добавим небольшой запас
             // Тигр уже у границы земли, не двигаем
             return;
         }
@@ -47,7 +47,7 @@ public class TigrMovementHandler {
             int viewPositionX = tiger.view.getRight();
 
             // Пример: скроллим, если тигр у края
-            if (viewPositionX > tiger.activityLevel.gameScroller.getScrollX() + UiUtil.getScreenWidth(tiger.activityLevel)) {
+            if (viewPositionX > tiger.activityLevel.gameScroller.getScrollX() + UiUtil.getScreenWidth(tiger.activityLevel) - marginScrollRight) {
                 tiger.scrollTo(tiger.activityLevel.gameScroller.getScrollX() + UiUtil.getScreenWidth(tiger.activityLevel) / 20);
             }
         });
@@ -86,7 +86,7 @@ public class TigrMovementHandler {
 
             // Если view перемещается внутрь ScrollView, прокрутка должна соответствовать
             // Например, чтобы view было видно, прокручиваем так, чтобы view было в центре или в нужной позиции
-            if (viewPositionX < tiger.activityLevel.gameScroller.getScrollX()) {
+            if (viewPositionX < tiger.activityLevel.gameScroller.getScrollX() + marginScrollLeft) {
                 // Перемещаем прокрутку влево
                 tiger.activityLevel.gameScroller.smoothScrollTo(viewPositionX, 0);
             }
