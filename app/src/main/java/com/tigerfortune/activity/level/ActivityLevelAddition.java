@@ -31,6 +31,8 @@ public class ActivityLevelAddition {
     public ActivityLevelAddition(ActivityLevel activityLevel) {
         this.activityLevel = activityLevel;
         tigr = new Tigr(activityLevel.tigr, speed, animationDuration, jumpHeight, activityLevel);
+
+        activityLevel.engine.addToRunnablArr(tigr.getTigrMovementHandler()::onFallUpdat);
     }
 
     @SuppressLint("ClickableViewAccessibility")

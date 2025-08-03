@@ -5,7 +5,6 @@
     android:id="@+id/constraintMain"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#5B94FF"
     tools:context=".activity.level.ActivityLevel">
 
     <com.tigerfortune.other.view.MyHSV

@@ -3,13 +3,22 @@ package com.tigerfortune.dto.tigr;
 import static com.tigerfortune.dto.StaticData.*;
 
 import android.animation.ValueAnimator;
+import android.content.res.Resources;
+import android.os.Handler;
+import android.os.Looper;
+import android.util.Log;
 import android.view.ViewGroup;
 
+import com.tigerfortune.dto.StaticData;
 import com.tigerfortune.other.util.UiUtil;
 
 public class TigrMovementHandler {
     Tigr tiger;
     boolean isJumping = false;
+    boolean isOnGround = true;
+    ValueAnimator downAnimator;
+    ValueAnimator upAnimator;
+    private Handler handler = new Handler(Looper.getMainLooper());
 
     public TigrMovementHandler(Tigr tiger) {
         this.tiger = tiger;
@@ -27,7 +36,7 @@ public class TigrMovementHandler {
         int tigerRightEdge = tiger.view.getRight();
 
         // Проверяем, не у края ли земля
-        if (tigerRightEdge >= groundWidth - tiger.activityLevel.groundItmWidthInDP) { // добавим небольшой запас
+        if (currentStart > groundWidth - tiger.activityLevel.groundItmWidthInDP) {//if (tigerRightEdge >= groundWidth - tiger.activityLevel.groundItmWidthInDP) { // добавим небольшой запас
             // Тигр уже у границы земли, не двигаем
             return;
         }
@@ -98,25 +107,35 @@ public class TigrMovementHandler {
     }
 
     public void jump() {
-        if (isJumping) return; // уже прыгает, не даем повторно прыгнуть
+        if (isJumping || !isOnGround) return; // уже прыгает, не даем повторно прыгнуть
 
         isJumping = true;
-        // Высота прыжка, например, 200 пикселей
+        isOnGround = false;
+        // Получаем текущие LayoutParams
+        ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) tiger.view.getLayoutParams();
+        int originalMarginBottom = layoutParams.bottomMargin;
 
-        // Анимация подъема
-        ValueAnimator upAnimator = ValueAnimator.ofFloat(0, -jumpHeight);
+        // Анимация подъема (изменение marginBottom)
+        upAnimator = ValueAnimator.ofInt(originalMarginBottom, originalMarginBottom + jumpHeight);
         upAnimator.setDuration(300); // время подъема
         upAnimator.addUpdateListener(animation -> {
-            float value = (float) animation.getAnimatedValue();
-            tiger.view.setTranslationY(value);
+            int value = (int) animation.getAnimatedValue();
+            layoutParams.bottomMargin = value;
+            tiger.view.setLayoutParams(layoutParams);
         });
 
-        // Анимация спуска (возврата на место)
-        ValueAnimator downAnimator = ValueAnimator.ofFloat(-jumpHeight, 0);
+        // Анимация спуска (возврат на место)
+        downAnimator = ValueAnimator.ofInt(originalMarginBottom + jumpHeight, originalMarginBottom);
         downAnimator.setDuration(300); // время спуска
         downAnimator.addUpdateListener(animation -> {
-            float value = (float) animation.getAnimatedValue();
-            tiger.view.setTranslationY(value);
+            int value = (int) animation.getAnimatedValue();
+
+            if (value >= StaticData.groundPos) {
+                if (!isOnGround) {
+                    layoutParams.bottomMargin = value;
+                    tiger.view.setLayoutParams(layoutParams);
+                }
+            }
         });
 
         // Объединяем анимации
@@ -131,37 +150,49 @@ public class TigrMovementHandler {
             @Override
             public void onAnimationEnd(android.animation.Animator animation) {
                 isJumping = false; // прыжок завершен
+                isOnGround = true;
             }
         });
 
         upAnimator.start();
     }
 
-    public int getMarginStart() {
-        if (tiger.view.getLayoutParams() instanceof ViewGroup.MarginLayoutParams) {
-            return ((ViewGroup.MarginLayoutParams) tiger.view.getLayoutParams()).getMarginStart();
-        }
-        return 0;
-    }
 
-    public int getMarginEnd() {
-        if (tiger.view.getLayoutParams() instanceof ViewGroup.MarginLayoutParams) {
-            return ((ViewGroup.MarginLayoutParams) tiger.view.getLayoutParams()).getMarginEnd();
-        }
-        return 0;
-    }
+    public void onFallUpdat() {
+        ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) tiger.view.getLayoutParams();
 
-    public int getMarginTop() {
-        if (tiger.view.getLayoutParams() instanceof ViewGroup.MarginLayoutParams) {
-            return ((ViewGroup.MarginLayoutParams) tiger.view.getLayoutParams()).topMargin;
-        }
-        return 0;
-    }
+        var obstacles = tiger.activityLevel.obstacles;
 
-    public int getMarginBottom() {
-        if (tiger.view.getLayoutParams() instanceof ViewGroup.MarginLayoutParams) {
-            return ((ViewGroup.MarginLayoutParams) tiger.view.getLayoutParams()).bottomMargin;
-        }
-        return 0;
+        obstacles.forEach(v -> {
+
+            ViewGroup.MarginLayoutParams paramsV = (ViewGroup.MarginLayoutParams) v.getLayoutParams();
+
+            int marginStart = params.leftMargin;
+            var y = params.bottomMargin;
+            var top = paramsV.bottomMargin;
+
+
+            int tigerWidth = tiger.view.getWidth() / 2;
+            var isOnPlatformHorzintollay =
+                    (marginStart < paramsV.leftMargin + v.getWidth() - tigerWidth) &&
+                            (marginStart + tigerWidth > paramsV.leftMargin);
+            var isOnPlatformVertically = y - top < 5;
+
+            if (isOnPlatformVertically && isOnPlatformHorzintollay) {
+                StaticData.groundPos = top;
+            } else if (!isOnPlatformHorzintollay) {
+                StaticData.groundPos = 0;
+                if (y != groundPos) {
+                    handler.post(() -> {
+                        params.bottomMargin = groundPos;
+                        tiger.view.setLayoutParams(params);
+                    });
+//                    Log.i("atgfdxcvxd", "");
+
+//                    if (downAnimator != null)
+//                        downAnimator.start();
+                }
+            }
+        });
     }
 }
