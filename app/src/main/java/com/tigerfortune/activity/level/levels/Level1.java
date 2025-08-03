@@ -23,10 +23,10 @@ public class Level1 implements Runnable {
 
         levelHandler.addDecorate(0, 0, widthPx / 2, heightPx/ 2, R.drawable.kust);
 
-        drawable = levelHandler.activityLevel.getResources().getDrawable(R.drawable.brick);
-        widthPx = drawable.getIntrinsicWidth();
-        heightPx = drawable.getIntrinsicHeight();
-        levelHandler.addObstacle(400, 50, widthPx, heightPx, R.drawable.brick);
+//        drawable = levelHandler.activityLevel.getResources().getDrawable(R.drawable.brick);
+//        widthPx = drawable.getIntrinsicWidth();
+//        heightPx = drawable.getIntrinsicHeight();
+        levelHandler.addObstacle(400, 50, 300, 120, R.drawable.brick);
 
         levelHandler.activityLevel.groundCount = 10;
         levelHandler.activityLevel.groundItmWidthInDP = 100;

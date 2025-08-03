@@ -169,7 +169,7 @@ public class TigrMovementHandler {
 
             int marginStart = params.leftMargin;
             var y = params.bottomMargin;
-            var top = paramsV.bottomMargin;
+            var top = paramsV.bottomMargin + v.getHeight();
 
 
             int tigerWidth = tiger.view.getWidth() / 2;
