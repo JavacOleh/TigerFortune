@@ -1,13 +1,12 @@
-package com.tigerfortune.activity.level;
+package com.tigerfortune.dto.level;
 
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.widget.ImageView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.tigerfortune.R;
-import com.tigerfortune.activity.level.levels.Level1;
+import com.tigerfortune.activity.ActivityLevel;
+import com.tigerfortune.dto.level.levels.Level1;
 import com.tigerfortune.other.util.UiUtil;
 
 import java.util.ArrayList;

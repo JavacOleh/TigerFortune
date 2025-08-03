@@ -1,11 +1,11 @@
-package com.tigerfortune.activity.level.levels;
+package com.tigerfortune.dto.level.levels;
 
 import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 
 import com.tigerfortune.R;
-import com.tigerfortune.activity.level.LevelHandler;
+import com.tigerfortune.dto.level.LevelHandler;
 
 import lombok.AllArgsConstructor;
 

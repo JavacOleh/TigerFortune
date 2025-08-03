@@ -1,7 +1,7 @@
 package com.tigerfortune.other.layout.manager;
 
 
-import com.tigerfortune.activity.level.ActivityLevel;
+import com.tigerfortune.activity.ActivityLevel;
 import com.tigerfortune.activity.ActivityMain;
 import com.tigerfortune.R;
 import com.tigerfortune.other.layout.data.Layout;

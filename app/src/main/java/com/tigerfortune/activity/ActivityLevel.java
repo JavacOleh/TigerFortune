@@ -1,4 +1,4 @@
-package com.tigerfortune.activity.level;
+package com.tigerfortune.activity;
 
 import android.os.Bundle;
 import android.view.View;
@@ -10,6 +10,8 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import com.tigerfortune.R;
 import com.tigerfortune.Engine;
 import com.tigerfortune.dto.StaticData;
+import com.tigerfortune.dto.level.LevelAddition;
+import com.tigerfortune.dto.level.LevelHandler;
 import com.tigerfortune.other.layout.Layoutable;
 import com.tigerfortune.other.view.GroundView;
 import com.tigerfortune.other.view.MyHSV;
@@ -28,7 +30,7 @@ public class ActivityLevel extends AppCompatActivity implements Layoutable {
     public List<View> obstacles = new ArrayList<>();
     public List<View> decorates = new ArrayList<>();
     public LevelHandler levelHandler;
-    private ActivityLevelAddition activityLevelAddition;
+    private LevelAddition levelAddition;
     public Engine engine;
 
     @Override
@@ -53,8 +55,8 @@ public class ActivityLevel extends AppCompatActivity implements Layoutable {
         ground = findViewById(R.id.ground);
         ground.setData(groundCount, groundItmBackgroundSRC, groundItmWidthInDP);
 
-        activityLevelAddition = new ActivityLevelAddition(this);
-        activityLevelAddition.init();
+        levelAddition = new LevelAddition(this);
+        levelAddition.init();
 
     }
 }

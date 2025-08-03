@@ -2,7 +2,7 @@ package com.tigerfortune.dto.tigr;
 
 import android.widget.ImageView;
 
-import com.tigerfortune.activity.level.ActivityLevel;
+import com.tigerfortune.activity.ActivityLevel;
 import lombok.Getter;
 
 @Getter

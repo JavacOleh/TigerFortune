@@ -1,4 +1,4 @@
-package com.tigerfortune.activity.level;
+package com.tigerfortune.dto.level;
 
 import static com.tigerfortune.dto.StaticData.*;
 
@@ -7,9 +7,10 @@ import android.os.Handler;
 import android.os.Looper;
 import android.view.MotionEvent;
 
+import com.tigerfortune.activity.ActivityLevel;
 import com.tigerfortune.dto.tigr.Tigr;
 
-public class ActivityLevelAddition {
+public class LevelAddition {
     private ActivityLevel activityLevel;
     private Tigr tigr;
     private boolean isLeftPressed = false;
@@ -28,7 +29,7 @@ public class ActivityLevelAddition {
         }
     };
 
-    public ActivityLevelAddition(ActivityLevel activityLevel) {
+    public LevelAddition(ActivityLevel activityLevel) {
         this.activityLevel = activityLevel;
         tigr = new Tigr(activityLevel.tigr, speed, animationDuration, jumpHeight, activityLevel);
 
