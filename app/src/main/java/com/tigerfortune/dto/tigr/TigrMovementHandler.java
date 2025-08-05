@@ -3,7 +3,6 @@ package com.tigerfortune.dto.tigr;
 import static com.tigerfortune.dto.StaticData.*;
 
 import android.animation.ValueAnimator;
-import android.content.res.Resources;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
@@ -14,11 +13,10 @@ import com.tigerfortune.other.util.UiUtil;
 
 public class TigrMovementHandler {
     Tigr tiger;
-    boolean isJumping = false;
-    boolean isOnGround = true;
-    ValueAnimator downAnimator;
-    ValueAnimator upAnimator;
-    private Handler handler = new Handler(Looper.getMainLooper());
+    public boolean isJumping = false;
+    public boolean isOnGround = true;
+    public ValueAnimator downAnimator;
+    public ValueAnimator upAnimator;
 
     public TigrMovementHandler(Tigr tiger) {
         this.tiger = tiger;
@@ -36,7 +34,7 @@ public class TigrMovementHandler {
         int tigerRightEdge = tiger.view.getRight();
 
         // Проверяем, не у края ли земля
-        if (currentStart > groundWidth - tiger.activityLevel.groundItmWidthInDP) {//if (tigerRightEdge >= groundWidth - tiger.activityLevel.groundItmWidthInDP) { // добавим небольшой запас
+        if (tigerRightEdge >= groundWidth - tiger.activityLevel.groundItmWidthInDP || isCloseToObstacheByRight) { // добавим небольшой запас
             // Тигр уже у границы земли, не двигаем
             return;
         }
@@ -46,6 +44,8 @@ public class TigrMovementHandler {
         animator.setDuration(animationDuration);
 
         animator.addUpdateListener(animation -> {
+            if (isCloseToObstacheByRight)
+                return;
             int value = (int) animation.getAnimatedValue();
 
             // Обновляем позицию тигра
@@ -61,9 +61,10 @@ public class TigrMovementHandler {
             }
         });
 
-        if (!isJumping) {
-            animator.start();
-        }
+        animator.start();
+//        if (!isJumping) {
+//            animator.start();
+//        }
     }
 
     public void moveLeft() {
@@ -74,15 +75,20 @@ public class TigrMovementHandler {
         int targetMarginLeft = currentMarginLeft - speed; // или другую логику для движения назад
 
         // Ограничения по границам
-        if (targetMarginLeft < 0) {
-            targetMarginLeft = 0;
+        if (targetMarginLeft < 0 || isCloseToObstacheByLeft) {
+            return;
         }
+
+        //Log.i("isCloseToObstacheByLeft", String.valueOf(isCloseToObstacheByLeft));
 
         // Анимация изменения margin
         ValueAnimator animator = ValueAnimator.ofInt(currentMarginLeft, targetMarginLeft);
         animator.setDuration(animationDuration);
 
         animator.addUpdateListener(animation -> {
+            if(isCloseToObstacheByLeft)
+                return;
+
             int newMarginLeft = (int) animation.getAnimatedValue();
 
             // Обновляем margin
@@ -101,9 +107,10 @@ public class TigrMovementHandler {
             }
         });
 
-        if (!isJumping) {
-            animator.start();
-        }
+        animator.start();
+//        if (!isJumping) {
+//            animator.start();
+//        }
     }
 
     public void jump() {
@@ -157,42 +164,4 @@ public class TigrMovementHandler {
         upAnimator.start();
     }
 
-
-    public void onFallUpdat() {
-        ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) tiger.view.getLayoutParams();
-
-        var obstacles = tiger.activityLevel.obstacles;
-
-        obstacles.forEach(v -> {
-
-            ViewGroup.MarginLayoutParams paramsV = (ViewGroup.MarginLayoutParams) v.getLayoutParams();
-
-            int marginStart = params.leftMargin;
-            var y = params.bottomMargin;
-            var top = paramsV.bottomMargin + v.getHeight();
-
-
-            int tigerWidth = tiger.view.getWidth() / 2;
-            var isOnPlatformHorzintollay =
-                    (marginStart < paramsV.leftMargin + v.getWidth() - tigerWidth) &&
-                            (marginStart + tigerWidth > paramsV.leftMargin);
-            var isOnPlatformVertically = y - top < 5;
-
-            if (isOnPlatformVertically && isOnPlatformHorzintollay) {
-                StaticData.groundPos = top;
-            } else if (!isOnPlatformHorzintollay) {
-                StaticData.groundPos = 0;
-                if (y != groundPos) {
-                    handler.post(() -> {
-                        params.bottomMargin = groundPos;
-                        tiger.view.setLayoutParams(params);
-                    });
-//                    Log.i("atgfdxcvxd", "");
-
-//                    if (downAnimator != null)
-//                        downAnimator.start();
-                }
-            }
-        });
-    }
 }

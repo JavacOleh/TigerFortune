@@ -1,16 +1,17 @@
-package com.tigerfortune;
+package com.tigerfortune.engine;
 
 import com.tigerfortune.other.util.ConcurrentUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class Engine {
     public static long waitFor = 100L;
-    public static long waitCycl = 300L;
+    public static long waitCycl = 100L;
     private Thread thread;
     public List<Runnable> runnables;
-
     private static Engine engine;
 
     private Engine() {
@@ -19,7 +20,9 @@ public class Engine {
             do {
                 for (int i = 0; i < runnables.size(); i++) {
                     var a = runnables.get(i);
-                    a.run();
+
+                    if (a != null)
+                        a.run();
 
                     ConcurrentUtil.sleep(waitFor);
                 }

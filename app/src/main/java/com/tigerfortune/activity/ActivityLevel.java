@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.tigerfortune.R;
-import com.tigerfortune.Engine;
+import com.tigerfortune.engine.Engine;
 import com.tigerfortune.dto.StaticData;
 import com.tigerfortune.dto.level.LevelAddition;
 import com.tigerfortune.dto.level.LevelHandler;
