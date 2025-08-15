@@ -6,15 +6,71 @@
     android:background="@drawable/main_background"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.ActivityMain">
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+    tools:context=".activity.MainActivity">
+    <ImageView
+        android:id="@+id/tigrFortuneTag"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        android:src="@drawable/tiger_fortune_nadpis"
+        android:scaleType="fitXY"
+        android:layout_marginTop="40dp"
+        android:layout_width="280dp"
+        android:layout_height="170dp"/>
+
+    <LinearLayout
+        app:layout_constraintTop_toBottomOf="@id/tigrFortuneTag"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:scaleType="fitXY"
+            android:src="@drawable/menu_text"
+            android:layout_width="250dp"
+            android:layout_gravity="center"
+            android:layout_height="100dp"
+            />
+        <TextView
+            android:id="@+id/buttonPlay"
+            android:background="@drawable/button_backgrond"
+            android:textColor="#3A2712"
+            android:textSize="50sp"
+            android:text="PLAY"
+            android:textStyle="bold"
+            android:textAlignment="center"
+            android:paddingTop="15dp"
+            android:layout_width="350dp"
+            android:layout_height="100dp"
+            android:layout_marginVertical="15dp"
+            />
+        <TextView
+            android:id="@+id/buttonResetResults"
+            android:background="@drawable/button_backgrond"
+            android:textColor="#3A2712"
+            android:textSize="50sp"
+            android:text="RESET"
+            android:textStyle="bold"
+            android:textAlignment="center"
+            android:paddingTop="15dp"
+            android:layout_width="350dp"
+            android:layout_height="100dp"
+            />
+        <TextView
+            android:id="@+id/buttonSETTINGS"
+            android:background="@drawable/button_backgrond"
+            android:textColor="#3A2712"
+            android:textSize="50sp"
+            android:text="SETTINGS"
+            android:textStyle="bold"
+            android:textAlignment="center"
+            android:paddingTop="15dp"
+            android:layout_width="350dp"
+            android:layout_height="100dp"
+            android:layout_marginTop="15dp"
+            />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

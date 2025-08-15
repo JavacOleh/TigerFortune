@@ -3,28 +3,24 @@ package com.tigerfortune.dto.tigr;
 import static com.tigerfortune.dto.StaticData.*;
 
 import android.animation.ValueAnimator;
-import android.os.Handler;
-import android.os.Looper;
 import android.util.Log;
 import android.view.ViewGroup;
 
-import com.tigerfortune.dto.StaticData;
+import com.tigerfortune.engine.addition.jump.JumpAnimator;
 import com.tigerfortune.other.util.UiUtil;
 
-public class TigrMovementHandler {
-    Tigr tiger;
+public class TigerMovementHandler {
+    Tiger tiger;
     public boolean isJumping = false;
     public boolean isOnGround = true;
-    public ValueAnimator downAnimator;
-    public ValueAnimator upAnimator;
 
-    public TigrMovementHandler(Tigr tiger) {
+    public TigerMovementHandler(Tiger tiger) {
         this.tiger = tiger;
     }
 
     public void moveRight() {
         // Получаем ширину земли (GroundView)
-        int groundWidth = tiger.activityLevel.ground.getWidth();
+        int groundWidth = tiger.levelActivity.ground.getWidth();
 
         // Получаем параметры и текущую позицию тигра
         ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) tiger.view.getLayoutParams();
@@ -34,7 +30,7 @@ public class TigrMovementHandler {
         int tigerRightEdge = tiger.view.getRight();
 
         // Проверяем, не у края ли земля
-        if (tigerRightEdge >= groundWidth - tiger.activityLevel.groundItmWidthInDP || isCloseToObstacheByRight) { // добавим небольшой запас
+        if (tigerRightEdge >= groundWidth - tiger.levelActivity.groundItmWidthInDP || isCloseToObstacheByRight) { // добавим небольшой запас
             // Тигр уже у границы земли, не двигаем
             return;
         }
@@ -56,8 +52,8 @@ public class TigrMovementHandler {
             int viewPositionX = tiger.view.getRight();
 
             // Пример: скроллим, если тигр у края
-            if (viewPositionX > tiger.activityLevel.gameScroller.getScrollX() + UiUtil.getScreenWidth(tiger.activityLevel) - marginScrollRight) {
-                tiger.scrollTo(tiger.activityLevel.gameScroller.getScrollX() + UiUtil.getScreenWidth(tiger.activityLevel) / 20);
+            if (viewPositionX > tiger.levelActivity.gameScroller.getScrollX() + UiUtil.getScreenWidth(tiger.levelActivity) - marginScrollRight) {
+                tiger.scrollTo(tiger.levelActivity.gameScroller.getScrollX() + UiUtil.getScreenWidth(tiger.levelActivity) / 20);
             }
         });
 
@@ -86,7 +82,7 @@ public class TigrMovementHandler {
         animator.setDuration(animationDuration);
 
         animator.addUpdateListener(animation -> {
-            if(isCloseToObstacheByLeft)
+            if (isCloseToObstacheByLeft)
                 return;
 
             int newMarginLeft = (int) animation.getAnimatedValue();
@@ -101,9 +97,9 @@ public class TigrMovementHandler {
 
             // Если view перемещается внутрь ScrollView, прокрутка должна соответствовать
             // Например, чтобы view было видно, прокручиваем так, чтобы view было в центре или в нужной позиции
-            if (viewPositionX < tiger.activityLevel.gameScroller.getScrollX() + marginScrollLeft) {
+            if (viewPositionX < tiger.levelActivity.gameScroller.getScrollX() + marginScrollLeft) {
                 // Перемещаем прокрутку влево
-                tiger.activityLevel.gameScroller.smoothScrollTo(viewPositionX, 0);
+                tiger.levelActivity.gameScroller.smoothScrollTo(viewPositionX, 0);
             }
         });
 
@@ -114,54 +110,10 @@ public class TigrMovementHandler {
     }
 
     public void jump() {
-        if (isJumping || !isOnGround) return; // уже прыгает, не даем повторно прыгнуть
+        if (!isOnGround) return; // уже прыгает, не даем повторно прыгнуть
 
-        isJumping = true;
-        isOnGround = false;
-        // Получаем текущие LayoutParams
-        ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) tiger.view.getLayoutParams();
-        int originalMarginBottom = layoutParams.bottomMargin;
-
-        // Анимация подъема (изменение marginBottom)
-        upAnimator = ValueAnimator.ofInt(originalMarginBottom, originalMarginBottom + jumpHeight);
-        upAnimator.setDuration(300); // время подъема
-        upAnimator.addUpdateListener(animation -> {
-            int value = (int) animation.getAnimatedValue();
-            layoutParams.bottomMargin = value;
-            tiger.view.setLayoutParams(layoutParams);
-        });
-
-        // Анимация спуска (возврат на место)
-        downAnimator = ValueAnimator.ofInt(originalMarginBottom + jumpHeight, originalMarginBottom);
-        downAnimator.setDuration(300); // время спуска
-        downAnimator.addUpdateListener(animation -> {
-            int value = (int) animation.getAnimatedValue();
-
-            if (value >= StaticData.groundPos) {
-                if (!isOnGround) {
-                    layoutParams.bottomMargin = value;
-                    tiger.view.setLayoutParams(layoutParams);
-                }
-            }
-        });
-
-        // Объединяем анимации
-        upAnimator.addListener(new android.animation.AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(android.animation.Animator animation) {
-                downAnimator.start();
-            }
-        });
-
-        downAnimator.addListener(new android.animation.AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(android.animation.Animator animation) {
-                isJumping = false; // прыжок завершен
-                isOnGround = true;
-            }
-        });
-
-        upAnimator.start();
+        JumpAnimator jumpAnimator = new JumpAnimator(tiger);
+        jumpAnimator.run();;
     }
 
 }

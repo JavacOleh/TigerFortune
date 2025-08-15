@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="bonus_sushi" type="id"/>
+    <item name="exit_portal_center" type="id"/>
+    <item name="exit_portal_layout" type="id"/>
+</resources>

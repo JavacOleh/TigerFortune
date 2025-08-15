@@ -1,9 +1,10 @@
 package com.tigerfortune.other.layout.manager;
 
 
-import com.tigerfortune.activity.ActivityLevel;
-import com.tigerfortune.activity.ActivityMain;
+import com.tigerfortune.activity.LevelActivity;
+import com.tigerfortune.activity.LoadingActivity;
 import com.tigerfortune.R;
+import com.tigerfortune.activity.MainActivity;
 import com.tigerfortune.other.layout.data.Layout;
 import com.tigerfortune.other.layout.size.LayoutSize;
 import com.tigerfortune.other.layout.size.enums.LayoutHeight;
@@ -46,8 +47,9 @@ public enum LayoutDefinition {
     // === Home Screen ===
     Home_screen(HomeScreenActivity.class, R.layout.activity_homescreen, "All Screens",LayoutHeight.High, LayoutWidth.Middle);
      */
-    Main_SmallScreen(ActivityMain.class, R.layout.activity_main, "basic", LayoutHeight.Small, LayoutWidth.Small),
-    Level_SmallScreen(ActivityLevel.class, R.layout.level_activity, "basic", LayoutHeight.Small, LayoutWidth.Small);
+    Main_SmallScreen(MainActivity.class, R.layout.activity_main, "basic", LayoutHeight.Small, LayoutWidth.Small),
+    Loading_SmallScreen(LoadingActivity.class, R.layout.activity_loading, "basic", LayoutHeight.Small, LayoutWidth.Small),
+    Level_SmallScreen(LevelActivity.class, R.layout.level_activity, "basic", LayoutHeight.Small, LayoutWidth.Small);
     public final Class<?> activityClass;
     public Layout layout;
     public final String deviceName;

@@ -1,44 +1,51 @@
 package com.tigerfortune.dto.level;
 
 import static com.tigerfortune.dto.StaticData.*;
+import static com.tigerfortune.other.util.UiUtil.mainThread;
 
 import android.annotation.SuppressLint;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.MotionEvent;
 
-import com.tigerfortune.activity.ActivityLevel;
-import com.tigerfortune.dto.tigr.Tigr;
+import com.tigerfortune.activity.LevelActivity;
+import com.tigerfortune.dto.tigr.Tiger;
+import com.tigerfortune.dto.tigr.TigrAnimatorHandler;
+import com.tigerfortune.engine.addition.exit.TigerExitAddition;
 
-public class LevelAddition {
-    private ActivityLevel activityLevel;
-    private Tigr tigr;
+public class ZhestyListener {
+    private LevelActivity levelActivity;
+    public TigrAnimatorHandler animatorHandler;
+    public Tiger tiger;
     private boolean isLeftPressed = false;
     private boolean isRightPressed = false;
-    private final Handler handler = new Handler(Looper.getMainLooper());
-
     private final Runnable moveRunnable = new Runnable() {
         @Override
         public void run() {
             if (isLeftPressed) {
-                tigr.getTigrMovementHandler().moveLeft();
+                tiger.tigerMovementHandler.moveLeft();
+                TigerExitAddition.getInstance(tiger).run();
+                animatorHandler.onAnimate("left");
             } else if (isRightPressed) {
-                tigr.getTigrMovementHandler().moveRight();
+                tiger.tigerMovementHandler.moveRight();
+                TigerExitAddition.getInstance(tiger).run();
+                animatorHandler.onAnimate("right");
             }
-            handler.postDelayed(this, moveInterval);
+
+            mainThread.postDelayed(this, moveInterval);
         }
     };
 
-    public LevelAddition(ActivityLevel activityLevel) {
-        this.activityLevel = activityLevel;
-        tigr = new Tigr(activityLevel.tigr, speed, animationDuration, jumpHeight, activityLevel);
-
-        activityLevel.engine.addToRunnablArr(tigr.getTigrAdditionToEngine()::onUpdate);
+    public ZhestyListener(LevelActivity levelActivity) {
+        this.levelActivity = levelActivity;
+        tiger = new Tiger(levelActivity.tiger, speed, animationDuration, jumpHeight, levelActivity);
+        animatorHandler = new TigrAnimatorHandler(tiger);
+        levelActivity.engine.addToRunnablArr(tiger.tigerAddition::onUpdate);
     }
 
     @SuppressLint("ClickableViewAccessibility")
     public void init() {
-        var constraintMain = activityLevel.constraintMain;
+        var constraintMain = levelActivity.constraintMain;
 
         constraintMain.setOnTouchListener((v, event) -> {
             float x = event.getX();
@@ -61,25 +68,35 @@ public class LevelAddition {
                         if (!isLeftPressed) {
                             isLeftPressed = true;
                             isRightPressed = false;
-                            handler.post(moveRunnable);
+                            mainThread.post(moveRunnable);
                         }
                     } else if (x > rightThreshold) {
                         // Правая часть
                         if (!isRightPressed) {
                             isRightPressed = true;
                             isLeftPressed = false;
-                            handler.post(moveRunnable);
+                            mainThread.post(moveRunnable);
                         }
                     } else {
                         // Верхняя половина — прыжок
-                        tigr.getTigrMovementHandler().jump(); // вызываем прыжок
+                        tiger.tigerMovementHandler.jump();
+                        animatorHandler.onAnimate("jump");
+//                        if(allowedToJump) {
+//                            tiger.tigerMovementHandler.jump(); // вызываем прыжок
+//                            tiger.tigerMovementHandler.isOnGround = false;
+//                            tiger.tigerMovementHandler.isJumping = true;
+//
+//                            allowedToJump = false;
+//
+//                            new Handler(Looper.getMainLooper()).postDelayed(() -> allowedToJump = true, fallDuration);
+//                        }
                     }
                     break;
                 case MotionEvent.ACTION_UP:
                 case MotionEvent.ACTION_CANCEL:
                     isLeftPressed = false;
                     isRightPressed = false;
-                    handler.removeCallbacks(moveRunnable);
+                    mainThread.removeCallbacks(moveRunnable);
                     break;
             }
             return true;
