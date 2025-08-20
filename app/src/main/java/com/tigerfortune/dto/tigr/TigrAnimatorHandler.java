@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.tigerfortune.R;
 import com.tigerfortune.other.util.ConcurrentUtil;
+import com.tigerfortune.other.util.DoOnce;
 import com.tigerfortune.other.util.UiUtil;
 
 import java.util.List;
@@ -15,6 +16,7 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class TigrAnimatorHandler {
+    private static DoOnce doOnce = new DoOnce();
 
     private final static List<Integer> movementViews = List.of(
             R.drawable.tigr_run_default,
@@ -52,13 +54,14 @@ public class TigrAnimatorHandler {
 
         tiger.view.invalidate();
         increaseCounter();
-        UiUtil.mainThread.postDelayed(this::onDefault, 1000L);
+        doOnce.actionOnce(() -> UiUtil.mainThread.postDelayed(this::onDefault, 1000L));
     }
 
     private void onDefault() {
         tiger.view.setImageResource(R.drawable.tigr_default);
         tiger.view.setScaleX(1);
         counter = 0;
+        doOnce.hasDon = false;
     }
 
     // Увеличиваем счетчик

@@ -2,6 +2,7 @@ package com.tigerfortune.dto.level;
 
 import static com.tigerfortune.dto.StaticData.defautlLevel;
 
+import android.app.GameState;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -9,6 +10,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.tigerfortune.R;
 import com.tigerfortune.activity.LevelActivity;
+import com.tigerfortune.dto.StaticData;
 import com.tigerfortune.dto.level.levels.Level1;
 import com.tigerfortune.other.util.UiUtil;
 
@@ -35,6 +37,7 @@ public class LevelHandler {
 
     public void buildLandshaft(int level) {
         var ind = Math.max(defautlLevel, Math.min(level, landshaftBuilders.size() - 1));
+        StaticData.currentLevel = ind;
         var a = landshaftBuilders.get(ind);
 
         if (a != null)

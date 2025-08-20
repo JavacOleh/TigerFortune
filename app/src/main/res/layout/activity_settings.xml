@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/main_background"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.SettingsActivity">
+
+    <LinearLayout
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_gravity="center_horizontal"
+            android:scaleType="fitXY"
+            android:src="@drawable/settings_text"
+            android:background="@android:color/transparent"
+            android:layout_width="wrap_content"
+            android:layout_height="80dp"/>
+
+        <FrameLayout
+            android:background="@drawable/button_backgrond"
+            android:paddingVertical="50dp"
+            android:paddingHorizontal="50dp"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_gravity="start|top"
+                android:text="SOUND"
+                android:textSize="30sp"
+                android:textStyle="bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <ImageView
+                android:id="@+id/check_box_sound"
+                android:layout_gravity="end|top"
+                android:src="@drawable/check_box_off"
+                android:layout_width="120dp"
+                android:scaleType="fitXY"
+                android:layout_height="40dp"/>
+
+            <TextView
+                android:layout_gravity="start|bottom"
+                android:text="EFFECTS"
+                android:textSize="30sp"
+                android:textStyle="bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <ImageView
+                android:id="@+id/check_box_effects"
+                android:layout_gravity="end|bottom"
+                android:src="@drawable/check_box_off"
+                android:layout_width="120dp"
+                android:scaleType="fitXY"
+                android:layout_height="40dp"/>
+        </FrameLayout>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

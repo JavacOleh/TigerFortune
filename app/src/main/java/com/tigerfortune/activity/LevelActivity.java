@@ -17,6 +17,8 @@ import com.tigerfortune.dto.StaticData;
 import com.tigerfortune.dto.level.ZhestyListener;
 import com.tigerfortune.dto.level.LevelHandler;
 import com.tigerfortune.other.layout.Layoutable;
+import com.tigerfortune.other.sound.MusicFabric;
+import com.tigerfortune.other.user.UserService;
 import com.tigerfortune.other.util.OutlineTextView;
 import com.tigerfortune.other.util.UiUtil;
 import com.tigerfortune.other.view.ExitView;
@@ -35,6 +37,7 @@ public class LevelActivity extends AppCompatActivity implements Layoutable {
     public GroundView ground;
     public ExitView exitView;
     public OutlineTextView coins_text;
+    public MusicFabric musicFabric;
     public ImageButton pause_button;
     public int groundCount;
     public int groundItmWidthInDP;
@@ -45,6 +48,7 @@ public class LevelActivity extends AppCompatActivity implements Layoutable {
     public List<View> decorates = new ArrayList<>();
     public LevelHandler levelHandler;
     private ZhestyListener zhestyListener;
+    public UserService userService;
     public Engine engine;
 
     @Override
@@ -52,10 +56,10 @@ public class LevelActivity extends AppCompatActivity implements Layoutable {
         super.onCreate(savedInstanceState);
         applyLayout(this);
         init();
-
-        pause_button.setOnClickListener(v -> {
-
-        });
+        musicFabric = MusicFabric.getInstance(this);
+        userService = UserService.getInstance(this);
+        coins_text.setText(String.valueOf(userService.getCollectedCoins()));
+        pause_button.setOnClickListener(v -> UiUtil.loadActivityFinishCurrent(this, MenuActivity.class));
 
 //        tiger.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
 //            @Override
@@ -82,8 +86,9 @@ public class LevelActivity extends AppCompatActivity implements Layoutable {
         ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) tiger.getLayoutParams();
         layoutParams.leftMargin = UiUtil.dpToPx(100);
         tiger.setLayoutParams(layoutParams);
-
+        musicFabric.toggleSound();
     }
+
 
     public void init() {
         constraintMain = findViewById(R.id.constraintMain);

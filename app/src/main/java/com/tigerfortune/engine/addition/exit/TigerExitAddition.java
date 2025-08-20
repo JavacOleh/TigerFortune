@@ -2,9 +2,11 @@ package com.tigerfortune.engine.addition.exit;
 import android.view.ViewGroup;
 import com.tigerfortune.activity.LoadingActivity;
 import com.tigerfortune.activity.MainActivity;
+import com.tigerfortune.dto.StaticData;
 import com.tigerfortune.dto.tigr.Tiger;
 import com.tigerfortune.engine.addition.TigerAddition;
 import com.tigerfortune.engine.addition.common.ViewCoordinates;
+import com.tigerfortune.other.user.UserService;
 import com.tigerfortune.other.util.UiUtil;
 
 public class TigerExitAddition extends TigerAddition implements Runnable {
@@ -33,6 +35,8 @@ public class TigerExitAddition extends TigerAddition implements Runnable {
         if (tigerStartX >= exitStartX && (tigrParams.bottomMargin <= exitParams.bottomMargin + exitParams.height)) {
             LoadingActivity.redirectClass = MainActivity.class;
             UiUtil.loadActivityFinishCurrent(tiger.levelActivity, LoadingActivity.redirectClass);
+            StaticData.currentLevel++;
+            UserService.getInstance(tiger.levelActivity).setCurrentLevel(StaticData.currentLevel);
         }
     }
 

@@ -14,6 +14,7 @@ import com.tigerfortune.engine.addition.fall.FallAnimator;
 import com.tigerfortune.engine.addition.fall.TigerFallAddition;
 import com.tigerfortune.engine.addition.jump.TigerJumpAddition;
 import com.tigerfortune.engine.addition.move.TigerMoveAddition;
+import com.tigerfortune.other.user.UserService;
 import com.tigerfortune.other.util.ConcurrentUtil;
 import com.tigerfortune.other.util.DoOnce;
 
@@ -45,7 +46,9 @@ public class TigerAddition {
         var collectable = tiger.levelActivity.collectable;
 
         //Обновление коинов
-        mainThread.post(() -> tiger.levelActivity.coins_text.setText(String.valueOf(earnedCoins)));
+        mainThread.post(() -> tiger.levelActivity.coins_text.
+                setText(String.valueOf
+                        (UserService.getInstance(tiger.levelActivity).getCollectedCoins())));
         var fallAnimator = new FallAnimator(tiger);
         fallAnimator.run();
 
