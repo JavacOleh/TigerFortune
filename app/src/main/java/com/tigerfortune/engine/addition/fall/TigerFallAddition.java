@@ -7,6 +7,7 @@ import android.view.View;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import com.tigerfortune.dto.Entity;
 import com.tigerfortune.dto.tigr.Tiger;
 import com.tigerfortune.engine.addition.TigerAddition;
 import com.tigerfortune.engine.addition.common.ViewCoordinates;
@@ -24,7 +25,7 @@ public class TigerFallAddition extends TigerAddition implements Runnable {
     public View view;
     public int index;
     public int viewTop;
-    private List<Integer> obstaclesPositions;
+    private List<Entity> obstaclesPositions;
     private List<View> obstacles;
     public static boolean check = true;
     ViewCoordinates viewCoordinates;
@@ -47,7 +48,7 @@ public class TigerFallAddition extends TigerAddition implements Runnable {
         if (check) {
             viewCoordinates = new ViewCoordinates(view, tiger);
             if (obstaclesPositions != null) {
-                viewTop = obstaclesPositions.get(index < obstaclesPositions.size() ? index : 0);
+                viewTop = obstaclesPositions.get(index < obstaclesPositions.size() ? index : 0).getY();
             }
             check = false;
         }
@@ -79,14 +80,14 @@ public class TigerFallAddition extends TigerAddition implements Runnable {
         }
     }
 
-    public static int setClosestGroundPos(List<View> obstacles, Tiger tiger, List<Integer> obstaclesPositions) {
+    public static int setClosestGroundPos(List<View> obstacles, Tiger tiger, List<Entity> obstaclesPositions) {
         for (int i = 0; i < obstacles.size(); i++) {
             var view = obstacles.get(i);
             var viewCoordinates = new ViewCoordinates(view, tiger);
             int viewTop = 0;
 
             if (obstaclesPositions != null) {
-                viewTop = obstaclesPositions.get(i < obstaclesPositions.size() ? i : obstaclesPositions.size() - 1);
+                viewTop = obstaclesPositions.get(i < obstaclesPositions.size() ? i : obstaclesPositions.size() - 1).getY();
             }
 
             if ((viewCoordinates.isTigerAndElOnSameGround() || !viewCoordinates.isTigerUnderEl()) && viewCoordinates.isAlthoughOnePixelInElHorizontally()) {

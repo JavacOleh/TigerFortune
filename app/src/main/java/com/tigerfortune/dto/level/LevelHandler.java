@@ -10,6 +10,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.tigerfortune.R;
 import com.tigerfortune.activity.LevelActivity;
+import com.tigerfortune.dto.Entity;
 import com.tigerfortune.dto.StaticData;
 import com.tigerfortune.dto.level.levels.Level1;
 import com.tigerfortune.other.util.UiUtil;
@@ -72,7 +73,11 @@ public class LevelHandler {
         levelActivity.constraintInside.addView(decorate);
 
         // Сохраняем добавленный элемент в список препятствий
-        putPositionToMap("decorates", UiUtil.dpToPx(y));
+        var entity = new Entity();
+        entity.setY(UiUtil.dpToPx(y));
+        entity.setX(UiUtil.dpToPx(x));
+        entity.setResId(res_id);
+        putPositionToMap("decorates", entity);
         levelActivity.decorates.add(decorate);
         levelActivity.tiger.bringToFront();
     }
@@ -104,12 +109,17 @@ public class LevelHandler {
         levelActivity.constraintInside.addView(obstacle);
 
         // Сохраняем добавленный элемент в список препятствий
-        putPositionToMap("obstacles", UiUtil.dpToPx(y));
+        var entity = new Entity();
+        entity.setY(UiUtil.dpToPx(y));
+        entity.setX(UiUtil.dpToPx(x));
+        entity.setResId(res_id);
+
+        putPositionToMap("obstacles", entity);
         levelActivity.obstacles.add(obstacle);
         levelActivity.tiger.bringToFront();
     }
 
-    public ArrayList<Integer> getPositionsByType(String entityType) {
+    public ArrayList<Entity> getPositionsByType(String entityType) {
         var map = levelActivity.entityTopPosMap;
 
         return switch (entityType) {
@@ -118,16 +128,16 @@ public class LevelHandler {
         };
     }
 
-    public void putPositionToMap(String entityType, int topPositon) {
+    public void putPositionToMap(String entityType, Entity entity) {
         var map = levelActivity.entityTopPosMap;
 
         if (map.containsKey(entityType)) {
             var a = map.get(entityType);
-            a.add(topPositon);
+            a.add(entity);
 
         } else {
-            var a = new ArrayList<Integer>();
-            a.add(topPositon);
+            var a = new ArrayList<Entity>();
+            a.add(entity);
             map.put(entityType, a);
         }
     }
