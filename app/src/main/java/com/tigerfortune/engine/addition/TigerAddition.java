@@ -26,7 +26,6 @@ public class TigerAddition {
     protected Tiger tiger;
     protected ExecutorService executor = Executors.newCachedThreadPool();
     private static DoOnce startUpdatersOnce = new DoOnce();
-    protected static ValueAnimator downAnimator;
 
     public TigerAddition(Tiger tiger) {
         this.tiger = tiger;
@@ -68,16 +67,16 @@ public class TigerAddition {
                 } while (true);
             });
 
-            executor.execute(() -> {
-                do {
-                    obstacles.forEach(view -> {
-                        var tigrMoveAddition = TigerMoveAddition.getInstance(tiger);
-                        tigrMoveAddition.view = view;
-                        tigrMoveAddition.run();
-                    });
-                    ConcurrentUtil.sleep(Engine.waitFor);
-                } while (true);
-            });
+//            executor.execute(() -> {
+//                do {
+//                    obstacles.forEach(view -> {
+//                        var tigrMoveAddition = TigerMoveAddition.getInstance(tiger);
+//                        tigrMoveAddition.view = view;
+//                        tigrMoveAddition.run();
+//                    });
+//                    ConcurrentUtil.sleep(Engine.waitFor);
+//                } while (true);
+//            });
 
             executor.execute(() -> {
                 do {
@@ -91,14 +90,16 @@ public class TigerAddition {
             });
 
             executor.execute(() -> {
-                do {
-                    collectable.forEach(view -> {
-                        var tigerCollectAddition = TigerCollectAddition.getInstance(tiger);
-                        tigerCollectAddition.view = view;
-                        tigerCollectAddition.run();
-                    });
-                    ConcurrentUtil.sleep(Engine.waitFor);
-                } while (true);
+                synchronized (this) {
+                    do {
+                        collectable.forEach(view -> {
+                            var tigerCollectAddition = TigerCollectAddition.getInstance(tiger);
+                            tigerCollectAddition.view = view;
+                            tigerCollectAddition.run();
+                        });
+                        ConcurrentUtil.sleep(Engine.waitFor);
+                    } while (true);
+                }
             });
         });
     }

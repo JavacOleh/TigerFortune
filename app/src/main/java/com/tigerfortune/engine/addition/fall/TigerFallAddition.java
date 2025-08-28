@@ -2,7 +2,6 @@ package com.tigerfortune.engine.addition.fall;
 
 import static com.tigerfortune.dto.StaticData.groundPos;
 
-import android.util.Log;
 import android.view.View;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -25,14 +24,14 @@ public class TigerFallAddition extends TigerAddition implements Runnable {
     public View view;
     public int index;
     public int viewTop;
-    private List<Entity> obstaclesPositions;
+    private List<Entity> obstaclesEntities;
     private List<View> obstacles;
     public static boolean check = true;
     ViewCoordinates viewCoordinates;
 
     private TigerFallAddition(Tiger tiger, List<View> obstacles) {
         super(tiger);
-        obstaclesPositions = tiger.levelActivity.levelHandler.getPositionsByType("obstacles");
+        obstaclesEntities = tiger.levelActivity.levelHandler.getPositionsByType("obstacles");
         this.obstacles = obstacles;
     }
 
@@ -47,8 +46,8 @@ public class TigerFallAddition extends TigerAddition implements Runnable {
     public void run() {
         if (check) {
             viewCoordinates = new ViewCoordinates(view, tiger);
-            if (obstaclesPositions != null) {
-                viewTop = obstaclesPositions.get(index < obstaclesPositions.size() ? index : 0).getY();
+            if (obstaclesEntities != null) {
+                viewTop = obstaclesEntities.get(index < obstaclesEntities.size() ? index : 0).getY();
             }
             check = false;
         }
@@ -60,7 +59,7 @@ public class TigerFallAddition extends TigerAddition implements Runnable {
 
             doOnce.actionOnce(() -> {
 
-                groundPos = setClosestGroundPos(obstacles, tiger, obstaclesPositions);//viewTop + view.getHeight(); //tigerLayoutParams.bottomMargin;
+                groundPos = setClosestGroundPos(obstacles, tiger, obstaclesEntities);//viewTop + view.getHeight(); //tigerLayoutParams.bottomMargin;
                 //tiger.tigerMovementHandler.isOnGround = true;
 
                 //viewCoordinates.bottomView = groundPos;
@@ -72,7 +71,7 @@ public class TigerFallAddition extends TigerAddition implements Runnable {
         } else if (!viewCoordinates.isTigerAndElOnSameGround()){
             check = true;
             doOnce2.actionOnce(() -> {
-                groundPos = setClosestGroundPos(obstacles, tiger, obstaclesPositions);//groundPos = 0; //tiger.levelActivity.ground.getTop()
+                groundPos = setClosestGroundPos(obstacles, tiger, obstaclesEntities);//groundPos = 0; //tiger.levelActivity.ground.getTop()
                 //tiger.tigerMovementHandler.isOnGround = false;
             });
 

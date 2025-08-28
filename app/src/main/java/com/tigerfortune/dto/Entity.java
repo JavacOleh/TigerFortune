@@ -7,4 +7,6 @@ public class Entity {
     int y;
     int x;
     int resId;
+    int width;
+    int height;
 }

@@ -76,6 +76,8 @@ public class LevelHandler {
         var entity = new Entity();
         entity.setY(UiUtil.dpToPx(y));
         entity.setX(UiUtil.dpToPx(x));
+        entity.setWidth(width);
+        entity.setHeight(height);
         entity.setResId(res_id);
         putPositionToMap("decorates", entity);
         levelActivity.decorates.add(decorate);
@@ -112,6 +114,8 @@ public class LevelHandler {
         var entity = new Entity();
         entity.setY(UiUtil.dpToPx(y));
         entity.setX(UiUtil.dpToPx(x));
+        entity.setWidth(width);
+        entity.setHeight(height);
         entity.setResId(res_id);
 
         putPositionToMap("obstacles", entity);
