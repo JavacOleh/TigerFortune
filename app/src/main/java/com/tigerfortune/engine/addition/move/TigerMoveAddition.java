@@ -5,7 +5,7 @@ import static com.tigerfortune.engine.addition.fall.TigerFallAddition.pogreshnos
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.tigerfortune.dto.Entity;
+import com.tigerfortune.dto.EntityInited;
 import com.tigerfortune.dto.StaticData;
 import com.tigerfortune.dto.tigr.Tiger;
 import com.tigerfortune.engine.addition.TigerAddition;
@@ -16,9 +16,9 @@ import java.util.List;
 Todo: Не работает нормально, потому отключён:
  */
 public class TigerMoveAddition extends TigerAddition implements Runnable {
-    private List<Entity> obstaclesEntities;
-    private static Entity closestEntityByRight;
-    private static Entity closestEntityByLeft;
+    private List<EntityInited> obstaclesEntities;
+    private static EntityInited closestEntityInitedByRight;
+    private static EntityInited closestEntityInitedByLeft;
     public static int pogreshnostXl = 0;
     public static int pogreshnostXr = pogreshnostHorL / 2 * -1;
     public static int pogreshnostY = 5;
@@ -41,10 +41,10 @@ public class TigerMoveAddition extends TigerAddition implements Runnable {
     public void run() {
         synchronized (this) {
             ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) tiger.view.getLayoutParams();
-            closestEntityByRight = getClosestEntity(0, params.leftMargin + params.width, false);
-            closestEntityByLeft = getClosestEntity(0, params.leftMargin, true);
-            StaticData.isCloseToObstacheByRight = closestEntityByRight != null;
-            StaticData.isCloseToObstacheByLeft = closestEntityByLeft != null;
+            closestEntityInitedByRight = getClosestEntity(0, params.leftMargin + params.width, false);
+            closestEntityInitedByLeft = getClosestEntity(0, params.leftMargin, true);
+            StaticData.isCloseToObstacheByRight = closestEntityInitedByRight != null;
+            StaticData.isCloseToObstacheByLeft = closestEntityInitedByLeft != null;
         }
 
 //
@@ -87,7 +87,7 @@ public class TigerMoveAddition extends TigerAddition implements Runnable {
 //        }
     }
 
-    private Entity getClosestEntity(int pogreshnost, int leftOrRight, boolean isForLeft) {
+    private EntityInited getClosestEntity(int pogreshnost, int leftOrRight, boolean isForLeft) {
         for (int i = 0; i < obstaclesEntities.size(); i++) {
             var entity = obstaclesEntities.get(i);
 

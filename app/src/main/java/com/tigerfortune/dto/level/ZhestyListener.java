@@ -4,14 +4,13 @@ import static com.tigerfortune.dto.StaticData.*;
 import static com.tigerfortune.other.util.UiUtil.mainThread;
 
 import android.annotation.SuppressLint;
-import android.os.Handler;
-import android.os.Looper;
+import android.util.Log;
 import android.view.MotionEvent;
 
 import com.tigerfortune.activity.LevelActivity;
 import com.tigerfortune.dto.tigr.Tiger;
 import com.tigerfortune.dto.tigr.TigrAnimatorHandler;
-import com.tigerfortune.engine.addition.exit.TigerExitAddition;
+import com.tigerfortune.engine.addition.end.TigerExitByPortalAddition;
 
 public class ZhestyListener {
     private LevelActivity levelActivity;
@@ -24,11 +23,11 @@ public class ZhestyListener {
         public void run() {
             if (isLeftPressed) {
                 tiger.tigerMovementHandler.moveLeft();
-                TigerExitAddition.getInstance(tiger).run();
+                TigerExitByPortalAddition.getInstance(tiger).run();
                 animatorHandler.onAnimate("left");
             } else if (isRightPressed) {
                 tiger.tigerMovementHandler.moveRight();
-                TigerExitAddition.getInstance(tiger).run();
+                TigerExitByPortalAddition.getInstance(tiger).run();
                 animatorHandler.onAnimate("right");
             }
 

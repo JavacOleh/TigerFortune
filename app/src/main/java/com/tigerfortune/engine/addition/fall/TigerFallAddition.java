@@ -6,7 +6,7 @@ import android.view.View;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 
-import com.tigerfortune.dto.Entity;
+import com.tigerfortune.dto.EntityInited;
 import com.tigerfortune.dto.tigr.Tiger;
 import com.tigerfortune.engine.addition.TigerAddition;
 import com.tigerfortune.engine.addition.common.ViewCoordinates;
@@ -24,7 +24,7 @@ public class TigerFallAddition extends TigerAddition implements Runnable {
     public View view;
     public int index;
     public int viewTop;
-    private List<Entity> obstaclesEntities;
+    private List<EntityInited> obstaclesEntities;
     private List<View> obstacles;
     public static boolean check = true;
     ViewCoordinates viewCoordinates;
@@ -79,7 +79,7 @@ public class TigerFallAddition extends TigerAddition implements Runnable {
         }
     }
 
-    public static int setClosestGroundPos(List<View> obstacles, Tiger tiger, List<Entity> obstaclesPositions) {
+    public static int setClosestGroundPos(List<View> obstacles, Tiger tiger, List<EntityInited> obstaclesPositions) {
         for (int i = 0; i < obstacles.size(); i++) {
             var view = obstacles.get(i);
             var viewCoordinates = new ViewCoordinates(view, tiger);

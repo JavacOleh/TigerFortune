@@ -1,4 +1,4 @@
-package com.tigerfortune.engine.addition.exit;
+package com.tigerfortune.engine.addition.end;
 import android.view.ViewGroup;
 import com.tigerfortune.activity.LoadingActivity;
 import com.tigerfortune.activity.MainActivity;
@@ -9,16 +9,16 @@ import com.tigerfortune.engine.addition.common.ViewCoordinates;
 import com.tigerfortune.other.user.UserService;
 import com.tigerfortune.other.util.UiUtil;
 
-public class TigerExitAddition extends TigerAddition implements Runnable {
-    private static TigerExitAddition instance;
+public class TigerExitByPortalAddition extends TigerAddition implements Runnable {
+    private static TigerExitByPortalAddition instance;
 
-    private TigerExitAddition(Tiger tiger) {
+    private TigerExitByPortalAddition(Tiger tiger) {
         super(tiger);
     }
 
-    public static TigerExitAddition getInstance(Tiger tiger) {
+    public static TigerExitByPortalAddition getInstance(Tiger tiger) {
         if (instance == null)
-            instance = new TigerExitAddition(tiger);
+            instance = new TigerExitByPortalAddition(tiger);
         return instance;
     }
 

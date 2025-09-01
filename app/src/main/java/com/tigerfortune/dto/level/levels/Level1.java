@@ -28,10 +28,11 @@ public class Level1 implements Runnable {
 //        drawable = levelHandler.activityLevel.getResources().getDrawable(R.drawable.brick);
 //        widthPx = drawable.getIntrinsicWidth();
 //        heightPx = drawable.getIntrinsicHeight();
-        levelHandler.addObstacle(300, 50, 300, 120, R.drawable.brick);
-        levelHandler.addObstacle(430, 100, 300, 120, R.drawable.brick);
-        levelHandler.addObstacle(560, 150, 300, 120, R.drawable.brick);
-        levelHandler.addObstacle(680, 200, 300, 120, R.drawable.brick);
+//        levelHandler.addObstacle(300, 50, 300, 120, R.drawable.brick);
+//        levelHandler.addObstacle(430, 100, 300, 120, R.drawable.brick);
+//        levelHandler.addObstacle(560, 150, 300, 120, R.drawable.brick);
+//        levelHandler.addObstacle(680, 200, 300, 120, R.drawable.brick);
+        levelHandler.addSnakeEnemy(500, 0, 300, 250, R.drawable.snake);
 
         levelHandler.addEbnutsaGolovojEl(780, 200, 300, 120);
 

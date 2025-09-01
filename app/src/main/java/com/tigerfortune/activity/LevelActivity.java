@@ -12,7 +12,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.tigerfortune.R;
-import com.tigerfortune.dto.Entity;
+import com.tigerfortune.dto.EntityInited;
+import com.tigerfortune.dto.enemy.EnemySnake;
 import com.tigerfortune.engine.Engine;
 import com.tigerfortune.dto.StaticData;
 import com.tigerfortune.dto.level.ZhestyListener;
@@ -43,8 +44,9 @@ public class LevelActivity extends AppCompatActivity implements Layoutable {
     public int groundCount;
     public int groundItmWidthInDP;
     public int groundItmBackgroundSRC;
-    public Map<String, ArrayList<Entity>> entityTopPosMap = new LinkedHashMap<>();
+    public Map<String, ArrayList<EntityInited>> entityMap = new LinkedHashMap<>();
     public List<View> obstacles = new ArrayList<>();
+    public List<EnemySnake> snakes = new ArrayList<>();
     public List<View> collectable = new ArrayList<>();
     public List<View> decorates = new ArrayList<>();
     public LevelHandler levelHandler;

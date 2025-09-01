@@ -3,7 +3,7 @@ package com.tigerfortune.dto;
 import lombok.Data;
 
 @Data
-public class Entity {
+public class EntityInited {
     int y;
     int x;
     int resId;

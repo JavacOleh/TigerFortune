@@ -2,7 +2,6 @@ package com.tigerfortune.dto.level;
 
 import static com.tigerfortune.dto.StaticData.defautlLevel;
 
-import android.app.GameState;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -10,8 +9,11 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.tigerfortune.R;
 import com.tigerfortune.activity.LevelActivity;
-import com.tigerfortune.dto.Entity;
+import com.tigerfortune.dto.EntityInited;
 import com.tigerfortune.dto.StaticData;
+import com.tigerfortune.dto.enemy.EnemySnake;
+import com.tigerfortune.dto.enemy.EnemySnakeMoveAnimator;
+import com.tigerfortune.dto.enemy.EnemySnakeMovement;
 import com.tigerfortune.dto.level.levels.Level1;
 import com.tigerfortune.other.util.UiUtil;
 
@@ -73,7 +75,7 @@ public class LevelHandler {
         levelActivity.constraintInside.addView(decorate);
 
         // Сохраняем добавленный элемент в список препятствий
-        var entity = new Entity();
+        var entity = new EntityInited();
         entity.setY(UiUtil.dpToPx(y));
         entity.setX(UiUtil.dpToPx(x));
         entity.setWidth(width);
@@ -82,6 +84,57 @@ public class LevelHandler {
         putPositionToMap("decorates", entity);
         levelActivity.decorates.add(decorate);
         levelActivity.tiger.bringToFront();
+    }
+
+
+    public void addSnakeEnemy(int x, int y, int width, int height, int res_id) {
+        ImageView enemy = new ImageView(levelActivity);
+        enemy.setImageResource(res_id);
+
+        ConstraintLayout.LayoutParams layoutParams = new ConstraintLayout.LayoutParams(
+                width, height);//UiUtil.dpToPx(width), UiUtil.dpToPx(height)); // Ширина и высота
+
+        int obstacleId = View.generateViewId();
+        enemy.setId(obstacleId); // Присваиваем уникальный id
+
+        // Устанавливаем положение (X, Y) для препятствия
+        layoutParams.bottomToTop = R.id.ground; // Привязка к ID элемента ground
+
+        // Устанавливаем отступы, если необходимо
+        layoutParams.leftToLeft = R.id.constraintInside;
+        layoutParams.leftMargin = UiUtil.dpToPx(x);  // Позиция по оси X
+        layoutParams.bottomMargin = UiUtil.dpToPx(y);   // Позиция по оси Y
+
+        enemy.setScaleType(ImageView.ScaleType.FIT_XY);
+        // Применяем параметры
+        enemy.setLayoutParams(layoutParams);
+
+        // Добавляем препятствие в layout
+        levelActivity.constraintInside.addView(enemy);
+
+        var entity = new EntityInited();
+        entity.setY(UiUtil.dpToPx(y));
+        entity.setX(UiUtil.dpToPx(x));
+        entity.setWidth(width);
+        entity.setHeight(height);
+        entity.setResId(res_id);
+
+
+        levelActivity.tiger.bringToFront();
+
+        //Start movement
+        EnemySnakeMoveAnimator snakeMoveAnimator = new EnemySnakeMoveAnimator(enemy);
+        EnemySnakeMovement snakeMovement = new EnemySnakeMovement(entity, enemy);
+
+        snakeMoveAnimator.onStartUpdateAnimation();
+        snakeMovement.onStartMove();
+
+        levelActivity.snakes.add(new EnemySnake(
+                enemy,
+                snakeMoveAnimator,
+                snakeMovement,
+                entity
+        ));
     }
 
     public void addObstacle(int x, int y, int width, int height, int res_id) {
@@ -111,7 +164,7 @@ public class LevelHandler {
         levelActivity.constraintInside.addView(obstacle);
 
         // Сохраняем добавленный элемент в список препятствий
-        var entity = new Entity();
+        var entity = new EntityInited();
         entity.setY(UiUtil.dpToPx(y));
         entity.setX(UiUtil.dpToPx(x));
         entity.setWidth(width);
@@ -123,25 +176,25 @@ public class LevelHandler {
         levelActivity.tiger.bringToFront();
     }
 
-    public ArrayList<Entity> getPositionsByType(String entityType) {
-        var map = levelActivity.entityTopPosMap;
+    public ArrayList<EntityInited> getPositionsByType(String entityType) {
+        var map = levelActivity.entityMap;
 
         return switch (entityType) {
-            case "obstacles", "decorates" -> levelActivity.entityTopPosMap.get(entityType);
+            case "obstacles", "decorates" -> levelActivity.entityMap.get(entityType);
             default -> null;
         };
     }
 
-    public void putPositionToMap(String entityType, Entity entity) {
-        var map = levelActivity.entityTopPosMap;
+    public void putPositionToMap(String entityType, EntityInited entityInited) {
+        var map = levelActivity.entityMap;
 
         if (map.containsKey(entityType)) {
             var a = map.get(entityType);
-            a.add(entity);
+            a.add(entityInited);
 
         } else {
-            var a = new ArrayList<Entity>();
-            a.add(entity);
+            var a = new ArrayList<EntityInited>();
+            a.add(entityInited);
             map.put(entityType, a);
         }
     }

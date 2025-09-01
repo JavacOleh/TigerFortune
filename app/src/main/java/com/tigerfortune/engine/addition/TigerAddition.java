@@ -4,9 +4,12 @@ import static com.tigerfortune.dto.StaticData.finalSpeed;
 import static com.tigerfortune.dto.StaticData.speed;
 import static com.tigerfortune.other.util.UiUtil.mainThread;
 
+import android.util.Log;
+
 import com.tigerfortune.dto.tigr.Tiger;
 import com.tigerfortune.engine.Engine;
 import com.tigerfortune.engine.addition.collect.TigerCollectAddition;
+import com.tigerfortune.engine.addition.end.TigerExitBySnakeAddition;
 import com.tigerfortune.engine.addition.fall.FallAnimator;
 import com.tigerfortune.engine.addition.fall.TigerFallAddition;
 import com.tigerfortune.engine.addition.jump.TigerJumpAddition;
@@ -97,6 +100,14 @@ public class TigerAddition {
                         ConcurrentUtil.sleep(Engine.waitFor);
                     } while (true);
                 }
+            });
+
+            executor.execute(() -> {
+                do {
+                    var tigerExitBySnake = TigerExitBySnakeAddition.getInstance(tiger);
+                    tigerExitBySnake.run();
+                    ConcurrentUtil.sleep(Engine.waitFor);
+                } while (true);
             });
         });
     }

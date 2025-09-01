@@ -21,6 +21,7 @@ public class TigerCollectAddition extends TigerAddition implements Runnable {
     private static TigerCollectAddition instance;
     public View view;
     private MusicFabric musicFabric;
+    public static int latestEarnedCoins;
 
     private TigerCollectAddition(Tiger tiger) {
         super(tiger);
@@ -47,9 +48,11 @@ public class TigerCollectAddition extends TigerAddition implements Runnable {
                 if (UiUtil.isDrawablesSame(view1.getDrawable(), coin)) {
                     musicFabric.playCoinTake();
                     userService.setCollectedCoins(userService.getCollectedCoins() + 1);
+                    latestEarnedCoins += 1;
                 } else if (UiUtil.isDrawablesSame(view1.getDrawable(), sushi)) {
                     musicFabric.playSushiTake();
                     userService.setCollectedCoins(userService.getCollectedCoins() + 10);
+                    latestEarnedCoins += 10;
                 }
 
                 mainThread.post(() -> {
