@@ -93,8 +93,8 @@ public class TigerMoveAddition extends TigerAddition implements Runnable {
 
             ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) tiger.view.getLayoutParams();
             var isClose = isForLeft
-                    ? entity.getX() - leftOrRight > pogreshnost
-                    : entity.getX() - leftOrRight < pogreshnost;
+                    ? params.leftMargin < entity.getX() + entity.getWidth() && params.leftMargin > entity.getX() //entity.getX() - leftOrRight > pogreshnost
+                    : params.leftMargin + params.width < entity.getX() + entity.getWidth() && params.leftMargin + params.width > entity.getX();
             var isNotOnObstache = !(params.bottomMargin > entity.getY());
             var isHitsVerticallyObstache = params.bottomMargin + tiger.view.getHeight() > entity.getY();
 

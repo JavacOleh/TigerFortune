@@ -1,11 +1,8 @@
 package com.tigerfortune.engine.addition;
 
-import static com.tigerfortune.dto.StaticData.earnedCoins;
 import static com.tigerfortune.dto.StaticData.finalSpeed;
 import static com.tigerfortune.dto.StaticData.speed;
 import static com.tigerfortune.other.util.UiUtil.mainThread;
-
-import android.animation.ValueAnimator;
 
 import com.tigerfortune.dto.tigr.Tiger;
 import com.tigerfortune.engine.Engine;
@@ -21,7 +18,7 @@ import com.tigerfortune.other.util.DoOnce;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-// TODO: 05.08.2025, 7:34 криво но работает: onMoveRightAndLeftUpdate
+// TODO: 01.09.2025 Вроде работает..
 public class TigerAddition {
     protected Tiger tiger;
     protected ExecutorService executor = Executors.newCachedThreadPool();
@@ -67,16 +64,16 @@ public class TigerAddition {
                 } while (true);
             });
 
-//            executor.execute(() -> {
-//                do {
-//                    obstacles.forEach(view -> {
-//                        var tigrMoveAddition = TigerMoveAddition.getInstance(tiger);
-//                        tigrMoveAddition.view = view;
-//                        tigrMoveAddition.run();
-//                    });
-//                    ConcurrentUtil.sleep(Engine.waitFor);
-//                } while (true);
-//            });
+            executor.execute(() -> {
+                do {
+                    obstacles.forEach(view -> {
+                        var tigrMoveAddition = TigerMoveAddition.getInstance(tiger);
+                        tigrMoveAddition.view = view;
+                        tigrMoveAddition.run();
+                    });
+                    ConcurrentUtil.sleep(Engine.waitFor);
+                } while (true);
+            });
 
             executor.execute(() -> {
                 do {
