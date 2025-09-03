@@ -9,8 +9,8 @@ import com.tigerfortune.other.util.DoOnce;
 
 public class EnemySnakeMovement {
     private DoOnce doOnce = new DoOnce();
-    public static int distanceInBothSides = 400;
-    public static long moverDuration = 1400;
+    public int distanceInBothSides = 400;
+    public long moverDuration = 1400;
     public int maxDistance;
     public int minDistance;
     public int current_entity_pos;
@@ -51,6 +51,8 @@ public class EnemySnakeMovement {
                     enemyView.setScaleX(1);
                     mover.setIntValues(maxDistance, minDistance);
                 }
+
+                current_entity_pos = ((ViewGroup.MarginLayoutParams) enemyView.getLayoutParams()).leftMargin;
             });
 
             mover.setRepeatCount(ValueAnimator.INFINITE);
@@ -59,6 +61,5 @@ public class EnemySnakeMovement {
         });
 
 
-        current_entity_pos = ((ViewGroup.MarginLayoutParams) enemyView.getLayoutParams()).leftMargin;
     }
 }

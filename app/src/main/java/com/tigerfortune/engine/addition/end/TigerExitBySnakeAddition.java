@@ -15,8 +15,9 @@ import com.tigerfortune.other.user.UserService;
 import com.tigerfortune.other.util.UiUtil;
 
 // TODO: 02.09.2025 Не работает и bottom margin здесь не причём.
-public class TigerExitBySnakeAddition extends TigerAddition implements Runnable{
+public class TigerExitBySnakeAddition extends TigerAddition implements Runnable {
     private static TigerExitBySnakeAddition instance;
+    public final static double pogreshnostX = 41.5;
 
     private TigerExitBySnakeAddition(Tiger tiger) {
         super(tiger);
@@ -36,22 +37,19 @@ public class TigerExitBySnakeAddition extends TigerAddition implements Runnable{
 
         var isCloseToSnake = isCloseToSnake(closestSnake);
 
-
         if (isCloseToSnake) {
-            LoadingActivity.redirectClass = MainActivity.class;
-            UiUtil.loadActivityFinishCurrent(tiger.levelActivity, LoadingActivity.redirectClass);
-
             var userService = UserService.getInstance(tiger.levelActivity);
             userService.setCurrentLevel(StaticData.currentLevel);
 
             var collectedCoins = userService.getCollectedCoins();
             userService.setCollectedCoins(collectedCoins - latestEarnedCoins);
             latestEarnedCoins = 0;
+
+            UiUtil.restartApp(tiger.levelActivity);
         }
 
     }
 
-    // TODO: 02.09.2025 Почему-то метод ниже возвращает всегда нулл 
     public EnemySnake getClosestSnake() {
         EnemySnake closest = null;
         var tigrParams = ((ViewGroup.MarginLayoutParams) tiger.view.getLayoutParams());
@@ -60,24 +58,51 @@ public class TigerExitBySnakeAddition extends TigerAddition implements Runnable{
             var entity = snake.getEntityInited();
             var max = snake.getSnakeMovement().maxDistance;
             var min = snake.getSnakeMovement().minDistance;
-            if (tigrParams.leftMargin + tigrParams.width < entity.getX() + max && tigrParams.leftMargin > entity.getX() + min) {
+
+            var checkMax = tigrParams.leftMargin + tigrParams.width < entity.getX() + max;
+            var checkMin = tigrParams.leftMargin > entity.getX() - min;
+
+            if (checkMax && checkMin) {
                 closest = snake;
                 break;
             }
         }
-
         return closest;
     }
 
     public boolean isCloseToSnake(EnemySnake enemySnake) {
         var tigrParams = ((ViewGroup.MarginLayoutParams) tiger.view.getLayoutParams());
+        var enemyParams = ((ViewGroup.MarginLayoutParams) enemySnake.getView().getLayoutParams());
+        var enemyLeft = enemyParams.leftMargin;
+
+        var isOnSameGround = tigrParams.bottomMargin == enemySnake.getEntityInited().getY();
+
+        var isCloseHorizontally =
+                getDiffBetween(tigrParams.leftMargin, enemyLeft + enemyParams.width) < pogreshnostX
+                ||
+                getDiffBetween(tigrParams.leftMargin + tigrParams.width, enemyLeft) < pogreshnostX;
 
         //боттом марджин здесь не причём.
-        return  tigrParams.bottomMargin == enemySnake.getEntityInited().getY() &&
-                tigrParams.leftMargin > enemySnake.getSnakeMovement().current_entity_pos &&
-                tigrParams.leftMargin
-                        + tigrParams.width
-                        < enemySnake.getSnakeMovement().current_entity_pos
-                        + enemySnake.getEntityInited().getWidth();
+        return isOnSameGround &&
+                isCloseHorizontally;
+//                tigrParams.leftMargin > enemySnake.getSnakeMovement().current_entity_pos &&
+//                tigrParams.leftMargin
+//                        + tigrParams.width
+//                        < enemySnake.getSnakeMovement().current_entity_pos
+//                        + enemySnake.getEntityInited().getWidth();
+    }
+
+    public double getDiffBetween(double a, double b) {
+        if (a < 0)
+            a *= -1;
+        if(b < 0)
+            b *= -1;
+        var aMinusB = a - b;
+        if (aMinusB < 0)
+            aMinusB *= -1;
+
+        System.out.println(aMinusB);
+
+        return aMinusB;
     }
 }

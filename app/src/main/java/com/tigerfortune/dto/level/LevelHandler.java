@@ -87,7 +87,7 @@ public class LevelHandler {
     }
 
 
-    public void addSnakeEnemy(int x, int y, int width, int height, int res_id) {
+    public void addSnakeEnemy(int x, int y, int width, int height, int res_id, Integer distanceInBothSides, Long moverDuration) {
         ImageView enemy = new ImageView(levelActivity);
         enemy.setImageResource(res_id);
 
@@ -124,17 +124,26 @@ public class LevelHandler {
 
         //Start movement
         EnemySnakeMoveAnimator snakeMoveAnimator = new EnemySnakeMoveAnimator(enemy);
-        EnemySnakeMovement snakeMovement = new EnemySnakeMovement(entity, enemy);
+        EnemySnakeMovement shakeMovement = new EnemySnakeMovement(entity, enemy);
+
+        if (distanceInBothSides != null)
+            shakeMovement.distanceInBothSides = distanceInBothSides;
+
+        if (moverDuration != null)
+            shakeMovement.moverDuration = moverDuration;
 
         snakeMoveAnimator.onStartUpdateAnimation();
-        snakeMovement.onStartMove();
+        shakeMovement.onStartMove();
 
         levelActivity.snakes.add(new EnemySnake(
                 enemy,
                 snakeMoveAnimator,
-                snakeMovement,
+                shakeMovement,
                 entity
         ));
+
+        enemy.bringToFront();
+        levelActivity.tiger.bringToFront();
     }
 
     public void addObstacle(int x, int y, int width, int height, int res_id) {
