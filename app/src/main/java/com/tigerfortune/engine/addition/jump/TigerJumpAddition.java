@@ -19,6 +19,8 @@ import com.tigerfortune.other.util.UiUtil;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+// TODO: 03.09.2025 Надо пересмотреть чтоб сделать так чтоб тигр мог
+//  не пролетать головой сквозь текстуры все а не только те где лаки блок есть
 public class TigerJumpAddition extends TigerAddition implements Runnable {
     private int pogreshonstY = 5;
     private static Map<ImageView, Boolean> viewsWhereItsPossibleToEbnutsaGolovoj = new LinkedHashMap<>();
