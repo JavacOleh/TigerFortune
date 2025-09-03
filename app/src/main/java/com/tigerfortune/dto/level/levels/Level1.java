@@ -25,14 +25,14 @@ public class Level1 implements Runnable {
         levelHandler.addDecorate(0, 0, widthPx / 2, heightPx/ 2, R.drawable.kust);
         levelHandler.addDecorate(0, 0, widthPx / 2, heightPx/ 2, R.drawable.kust);
 
-//        drawable = levelHandler.activityLevel.getResources().getDrawable(R.drawable.brick);
-//        widthPx = drawable.getIntrinsicWidth();
-//        heightPx = drawable.getIntrinsicHeight();
-//        levelHandler.addObstacle(300, 50, 300, 120, R.drawable.brick);
-//        levelHandler.addObstacle(430, 100, 300, 120, R.drawable.brick);
-//        levelHandler.addObstacle(560, 150, 300, 120, R.drawable.brick);
-//        levelHandler.addObstacle(680, 200, 300, 120, R.drawable.brick);
-        levelHandler.addSnakeEnemy(300, 0, 300, 250, R.drawable.snake, null, null);
+        drawable = levelHandler.levelActivity.getResources().getDrawable(R.drawable.brick);
+        widthPx = drawable.getIntrinsicWidth();
+        heightPx = drawable.getIntrinsicHeight();
+        levelHandler.addObstacle(300, 50, 300, 120, R.drawable.brick);
+        levelHandler.addObstacle(430, 100, 300, 120, R.drawable.brick);
+        levelHandler.addObstacle(560, 150, 300, 120, R.drawable.brick);
+        levelHandler.addObstacle(680, 200, 300, 120, R.drawable.brick);
+        //levelHandler.addSnakeEnemy(300, 0, 300, 250, R.drawable.snake, null, null);
 
         levelHandler.addEbnutsaGolovojEl(780, 200, 300, 120);
 
